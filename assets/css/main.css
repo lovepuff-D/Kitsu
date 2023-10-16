@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .container {
+        @apply max-w-[1110px] mx-auto;
+    }
+
+    .divider {
+        @apply w-full h-[1px] bg-[#eaeaea]
+    }
+}
+
+@layer base {
+    body {
+        @apply text-base/[1.5] text-[#464646] bg-[#f7f7f7]
+    }
+}
