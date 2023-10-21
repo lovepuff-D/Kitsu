@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <NuxtLink :to="`anime/${anime?.slug}`" class="relative">
+  <div :class="$attrs.class">
+    <NuxtLink :to="`/anime/${anime?.slug}`" class="relative">
       <img
         :src="anime?.posterImage.medium"
         alt=""
@@ -19,7 +19,10 @@ interface Props {
   anime: any,
 }
 
-defineOptions({name: 'card'})
+defineOptions({
+  name: 'card',
+  inheritAttrs: false
+})
 defineProps<Props>()
 </script>
 

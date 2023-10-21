@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-[84px]">
     <div class="w-full flex gap-8 h-full ">
       <div class="flex flex-col gap-12 flex-1">
         <div class="flex flex-col gap-3">
@@ -32,7 +32,7 @@
           </section>
         </div>
       </div>
-      <div class="flex flex-col gap-8 w-[300px] flex-shrink-0 bg-white self-start p-6">
+      <div class="flex flex-col gap-8 bg-white self-start p-6">
         <div>
           <h5 class="mb-4">MY FAVORITE CATEGORIES</h5>
           <p>Favoriting categories will improve your recommendations</p>
@@ -56,7 +56,11 @@
 import { CardAnime } from '../src/entities/card-anime'
 /*import { useCategoryStore } from '~/store/categories'*/
 import { onMounted, ref } from 'vue'
-import { useAsyncData, useFetch } from 'nuxt/app';
+import { useAsyncData, useFetch, useHead } from 'nuxt/app';
+
+useHead({
+  title: 'Explore Anime'
+})
 
 let {data: listTrendingAnime} = await useFetch('https://kitsu.io/api/edge/trending/anime', {
   params: {

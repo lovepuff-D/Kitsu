@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,vue,ts}",
     "./pages/**/*.vue",
+    "./layouts/**/*.vue",
     "./app.vue",
   ],
   theme: {

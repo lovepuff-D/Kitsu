@@ -35,7 +35,7 @@
               >
                 Characters
               </NuxtLink>
-              <NuxtLink
+              <!--<NuxtLink
                 :to="`/anime/${route.params.slug}/reactions`"
                 class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
               >
@@ -46,10 +46,10 @@
                 class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
               >
                 Franchise
-              </NuxtLink>
+              </NuxtLink>-->
             </div>
           </div>
-          <NuxtPage :anime="anime"/>
+          <NuxtPage :anime="anime" :animeTitle="animeTitle"/>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ import { CardAnime } from '../../src/entities/card-anime'
 import { CardCharacter } from '../../src/entities/card-character'
 import { defineOptions } from '@vue/runtime-core';
 import { useFetch, useRoute } from 'nuxt/app';
-import { onMounted, Ref, ref } from 'vue'
+import { onMounted, Ref, ref, useAttrs } from 'vue'
 import { computed } from '@vue/reactivity';
 import { AnimeDetails } from '../../src/shared/types/anime';
 defineOptions({
@@ -70,8 +70,13 @@ defineOptions({
 
 let route = useRoute()
 let animeSeries = ref([])
-let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(`https://kitsu.io/api/edge/anime?fields[categories]=slug,title&filter[slug]=${ route.params.slug }&include=categories`, {
+let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(`https://kitsu.io/api/edge/anime`, {
   key: 'animeDetails',
+  query: {
+    'fields[categories]': 'slug,title',
+    'include': 'categories',
+    'filter[slug]': route.params.slug
+  },
   transform: (r): AnimeDetails => {
     return {
       id: r.data[0].id,
@@ -80,6 +85,11 @@ let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(`https://kitsu.i
     }
   }
 })
+
+const animeTitle = computed(() => {
+  return anime.value.details.titles.en ? anime.value.details.titles.en : anime.value.details.titles.en_jp
+})
+
 
 onMounted(() => {
   getAnimeSeries(anime.value.id)

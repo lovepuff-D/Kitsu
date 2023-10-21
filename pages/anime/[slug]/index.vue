@@ -3,7 +3,7 @@
     <div>
       <div>
         <h3 class="font-bold text-[28px]">
-          {{ anime.details.titles.en ? anime.details.titles.en : anime.details.titles.en_jp }}
+          {{ animeTitle }}
           <span class="font-bold text-[17px] text-[#999]">
                 {{ anime.details.startDate.split('-')[0] }}
               </span>
@@ -91,7 +91,7 @@
             <div class="divider my-4"></div>
             <div>
               <h6 class="text-[15px] font-bold mb-3">More from this Series</h6>
-              <div class="flex justify-between text-sm mb-3">
+              <div class="grid grid-cols-4 text-sm mb-3">
                 <template
                   v-for="relatedAnime in animeSeries"
                   :key="relatedAnime.id"
@@ -117,7 +117,7 @@
 import { CardAnime } from '../../../src/entities/card-anime'
 import { CardCharacter } from '../../../src/entities/card-character'
 import { defineOptions } from '@vue/runtime-core';
-import { useFetch, useRoute } from 'nuxt/app';
+import { useFetch, useRoute, useHead } from 'nuxt/app';
 import { onMounted, Ref, ref, useAttrs } from 'vue'
 import { computed } from '@vue/reactivity';
 import { AnimeDetails } from '../../../src/shared/types/anime';
@@ -126,6 +126,11 @@ let route = useRoute()
 let animeSeries = ref([])
 
 let anime = await useAttrs().anime
+let animeTitle = await useAttrs().animeTitle
+
+useHead({
+  title: String(animeTitle)
+})
 
 onMounted(() => {
   getAnimeSeries(anime.id)
