@@ -12,7 +12,7 @@
             <h6 class="font-semibold">Trending This Week</h6>
             <div class="flex gap-3">
               <CardAnime
-                v-for="trendingAnime in listTrendingAnime.data"
+                v-for="trendingAnime in listTrendingAnime"
                 :key="trendingAnime.id"
                 size="MEDIUM"
                 :anime="trendingAnime.attributes"
@@ -23,7 +23,7 @@
             <h6 class="font-semibold">Most Popular Anime</h6>
             <div class="flex gap-3">
               <CardAnime
-                v-for="trendingAnime in listMostPopularAnime.data"
+                v-for="trendingAnime in listMostPopularAnime"
                 :key="trendingAnime.id"
                 size="MEDIUM"
                 :anime="trendingAnime.attributes"
@@ -51,27 +51,37 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { CardAnime } from '../src/entities/card-anime'
+import { CardAnime } from '@@/src/entities/card-anime'
 /*import { useCategoryStore } from '~/store/categories'*/
 import { onMounted, ref } from 'vue'
 import { useAsyncData, useFetch, useHead } from 'nuxt/app';
+import { AnimeDetails } from '@@/src/shared/types/anime';
+
+type animeList = {
+  id: string;
+  attributes: AnimeDetails['details'];
+}[]
+
 
 useHead({
   title: 'Explore Anime'
 })
 
 let {data: listTrendingAnime} = await useFetch('https://kitsu.io/api/edge/trending/anime', {
+  key: 'listTrendingAnime',
   params: {
     limit: 5
-  }
+  },
+  transform: (r:any):animeList => r.data.map((item:any) => ({id: item.id, attributes: item.attributes}))
 })
 let {data: listMostPopularAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
+  key: 'listMostPopularAnime',
   params: {
     'page[limit]': 5,
     sort: '-user_count'
-  }
+  },
+  transform: (r:any):animeList => r.data.map((item:any) => ({id: item.id, attributes: item.attributes}))
 })
 /*let {data: categories} = await useFetch('https://kitsu.io/api/edge/categories')*/
 

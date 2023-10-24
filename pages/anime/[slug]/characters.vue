@@ -33,9 +33,9 @@
 import { defineOptions } from '@vue/runtime-core';
 import { useFetch, useHead, useRoute } from 'nuxt/app';
 import { computed } from '@vue/reactivity';
-import { Character } from '../../../src/shared/types/character';
+import { Character } from '@@/src/shared/types/character';
 import { Ref, useAttrs } from 'vue';
-import Loader from '../../../src/shared/ui/loader.vue';
+import Loader from '@@/src/shared/ui/loader.vue';
 
 let route = useRoute()
 

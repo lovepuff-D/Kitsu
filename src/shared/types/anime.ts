@@ -24,7 +24,7 @@ export enum Type {
   Categories = "categories",
 }
 
-export interface Details {
+interface Details {
   createdAt:           Date;
   updatedAt:           Date;
   slug:                string;
@@ -53,6 +53,8 @@ export interface Details {
   episodeCount:        number;
   episodeLength:       number;
   totalLength:         number;
+  computedLength:       string;
+  computedRating:       string;
   youtubeVideoId:      string;
   showType:            string;
   nsfw:                boolean;

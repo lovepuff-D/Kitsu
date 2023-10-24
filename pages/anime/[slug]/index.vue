@@ -15,16 +15,16 @@
         <button
           v-if="isShowCroppedDescription"
           @click="readMore"
-          class="mt-8 text-[#f75239]"
+          class="mt-5 text-[#f75239]"
         >
           read more
         </button>
       </div>
       <div class="flex flex-wrap gap-1 mt-8">
+        <!--:to="`/category/${category.attributes.slug}`"-->
         <NuxtLink
           v-for="category in anime.categories"
           :key="category.id"
-          :to="`/category/${category.attributes.slug}`"
           class="bg-white rounded border border-main text-sm px-2 hover:bg-[#f7f7f7]"
         >
           {{ category.attributes.title }}
@@ -59,25 +59,27 @@
             >
               <li
                 v-if="detail"
-                class="flex gap-4"
+                class="flex items-center gap-4"
               >
-                <div class="w-1/4 font-bold">{{ detail.name }}</div>
+                <div class="w-1/4 font-bold shrink-0">{{ detail.name }}</div>
                 <div class="w-full">{{ detail.value }}</div>
               </li>
             </template>
           </ul>
-          <div class="mt-4 text-sm text-[#999]">More Info</div>
+          <!--<div class="mt-4 text-sm text-[#999]">More Info</div>-->
         </div>
         <ClientOnly>
-          <template v-if="false">
+          <template v-if="characters">
             <div class="divider my-4"></div>
             <div>
               <h6 class="text-[15px] font-bold mb-3">Characters</h6>
-              <div class="flex justify-between text-sm mb-3">
-                <CardCharacter size="TINY" :character="anime.details"/>
-                <CardCharacter size="TINY" :character="anime.details"/>
-                <CardCharacter size="TINY" :character="anime.details"/>
-                <CardCharacter size="TINY" :character="anime.details"/>
+              <div class="grid grid-cols-4 text-sm mb-3">
+                <template
+                  v-for="character in characters"
+                  :key="character.malId"
+                >
+                  <CardCharacter size="TINY" :character="character"/>
+                </template>
               </div>
               <NuxtLink
                 :to="`/anime/${route.params.slug}/characters`"
@@ -114,13 +116,12 @@
 </template>
 
 <script setup lang="ts">
-import { CardAnime } from '../../../src/entities/card-anime'
-import { CardCharacter } from '../../../src/entities/card-character'
-import { defineOptions } from '@vue/runtime-core';
+import { CardAnime } from '@@/src/entities/card-anime'
+import { CardCharacter } from '@@/src/entities/card-character'
 import { useFetch, useRoute, useHead } from 'nuxt/app';
 import { onMounted, Ref, ref, useAttrs } from 'vue'
 import { computed } from '@vue/reactivity';
-import { AnimeDetails } from '../../../src/shared/types/anime';
+import { Character } from '@@/src/shared/types/character';
 
 let route = useRoute()
 let animeSeries = ref([])
@@ -145,7 +146,7 @@ async function getAnimeSeries(id: string) {
 let animeDescription = ref(checkDescriptionLength(anime.details.description) ? anime.details.description.substr(0, 475) + '...' : anime.details.description)
 let isShowCroppedDescription = ref(checkDescriptionLength(anime.details.description))
 const animeDetails = computed(() => {
-  const detailNames = ['titles', 'subtype', 'episodeCount', 'status', 'ageRating', 'ageRatingGuide', 'episodeLength', 'totalLength']
+  const detailNames = ['titles', 'subtype', 'episodeCount', 'status', 'computedRating', 'computedLength']
   const result = {}
 
   detailNames.forEach(detailName => {
@@ -183,18 +184,23 @@ const animeDetails = computed(() => {
         return 'Episodes'
       case 'status':
         return 'Status'
-      case 'ageRating':
+      case 'computedRating':
         return 'Rating'
-      case 'ageRatingGuide':
-        return 'Rating'
-      case 'episodeLength':
-        return 'Length'
-      case 'totalLength':
+      case 'computedLength':
         return 'Length'
     }
   }
 
   return result
+})
+
+let { data: characters }: { data: Character[] } = await useFetch(`https://kitsu.io/api/edge/anime/${7442}/anime-characters`, {
+  key: 'listOfCharacters',
+  query: {
+    include:'character',
+    'page[limit]': 4
+  },
+  transform: (r) => r.included.map(item => item.attributes)
 })
 
 function checkDescriptionLength(str: string):boolean {

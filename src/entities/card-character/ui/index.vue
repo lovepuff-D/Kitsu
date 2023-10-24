@@ -1,22 +1,24 @@
 <template>
   <div class="">
-    <NuxtLink :to="`anime/${character?.slug}`" class="relative">
+    <div class="relative">
       <img
-        :src="character?.posterImage.medium"
+        :src="character.image.original"
         alt=""
         :class="[size === 'MEDIUM' ? 'max-w-[155px]' : 'max-w-[55px]']"
+        :title="character.name"
       >
       <!--<NuxtLink :to="`anime/${anime?.slug}`" class=""></NuxtLink>-->
-    </NuxtLink>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineOptions, defineProps } from '@vue/runtime-core';
+import { AnimeDetails } from '@@/shared/types/anime';
 
 interface Props {
   size: 'MEDIUM' | 'TINY',
-  character: any,
+  character: AnimeDetails['details'],
 }
 
 defineOptions({name: 'card'})

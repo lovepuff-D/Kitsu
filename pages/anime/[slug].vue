@@ -57,13 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import { CardAnime } from '../../src/entities/card-anime'
-import { CardCharacter } from '../../src/entities/card-character'
 import { defineOptions } from '@vue/runtime-core';
 import { useFetch, useRoute } from 'nuxt/app';
 import { onMounted, Ref, ref, useAttrs } from 'vue'
 import { computed } from '@vue/reactivity';
-import { AnimeDetails } from '../../src/shared/types/anime';
+import { AnimeDetails } from '@@/src/shared/types/anime';
 defineOptions({
   name: 'anime-page'
 })
@@ -78,11 +76,14 @@ let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(`https://kitsu.i
     'filter[slug]': route.params.slug
   },
   transform: (r): AnimeDetails => {
-    return {
+    const mapped = {
       id: r.data[0].id,
       details: r.data[0].attributes,
       categories: r.included?.filter(v => v.type === 'categories'),
     }
+    mapped.details.computedLength = `${mapped.details.totalLength / 60} hours total (${mapped.details.episodeLength} minutes each)`
+    mapped.details.computedRating = `${mapped.details.ageRating} - ${mapped.details.ageRatingGuide}`
+    return mapped
   }
 })
 

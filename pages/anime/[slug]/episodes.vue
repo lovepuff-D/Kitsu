@@ -26,8 +26,8 @@
 <script setup lang="ts">
 
 import { useFetch, useHead } from 'nuxt/app';
-import { Episodes } from '../../../src/shared/types/episodes';
-import Loader from '../../../src/shared/ui/loader.vue';
+import { Episodes } from '@@/src/shared/types/episodes';
+import Loader from '@@/src/shared/ui/loader.vue';
 import { Ref, useAttrs } from 'vue';
 
 let anime = await useAttrs().anime

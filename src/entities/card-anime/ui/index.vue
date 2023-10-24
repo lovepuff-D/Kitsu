@@ -5,6 +5,7 @@
         :src="anime?.posterImage.medium"
         alt=""
         :class="[size === 'MEDIUM' ? 'max-w-[155px]' : 'max-w-[55px]']"
+        :title="anime.canonicalTitle"
       >
       <!--<NuxtLink :to="`anime/${anime?.slug}`" class=""></NuxtLink>-->
     </NuxtLink>
@@ -13,10 +14,11 @@
 
 <script setup lang="ts">
 import { defineOptions, defineProps } from '@vue/runtime-core';
+import { AnimeDetails } from '@@/src/shared/types/anime';
 
 interface Props {
   size: 'MEDIUM' | 'TINY',
-  anime: any,
+  anime: AnimeDetails['details'],
 }
 
 defineOptions({
