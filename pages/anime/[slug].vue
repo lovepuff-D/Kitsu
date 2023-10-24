@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import { defineOptions } from '@vue/runtime-core';
-import { useFetch, useRoute } from 'nuxt/app';
+import { useFetch, useRoute, useAppConfig } from 'nuxt/app';
 import { onMounted, Ref, ref, useAttrs } from 'vue'
 import { computed } from '@vue/reactivity';
 import { AnimeDetails } from '@@/src/shared/types/anime';
@@ -66,9 +66,11 @@ defineOptions({
   name: 'anime-page'
 })
 
+const config = await useAppConfig()
+
 let route = useRoute()
 let animeSeries = ref([])
-let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(`https://kitsu.io/api/edge/anime`, {
+let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(config.host, {
   key: 'animeDetails',
   query: {
     'fields[categories]': 'slug,title',
