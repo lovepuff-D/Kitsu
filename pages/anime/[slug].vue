@@ -1,76 +1,80 @@
 <template>
-  <div class="">
-    <img :src="anime.details.coverImage.original" alt="" class="w-full h-[400px] object-cover">
-  </div>
-  <div class="bg-[#f7f7f7]">
-    <div class="container">
-      <div class="flex items-start gap-8">
-        <div class="flex-shrink-0 w-[200px] relative top-[-80px]">
-          <div class="">
-            <div class="mb-4 rounded overflow-hidden">
-              <img :src="anime.details.posterImage.medium" alt="">
-            </div>
-          </div>
-          <div>Watch on</div>
-        </div>
-        <div class="flex-1">
-          <div class="bg-white rounded mb-4">
-            <div class="flex w-max text-center rounded overflow-hidden">
-              <NuxtLink
-                :to="`/anime/${route.params.slug}`"
-                class="py-4 px-7 flex-1 hover:bg-black hover:text-white"
-                disabled="true"
-              >
-                Summary
-              </NuxtLink>
-              <NuxtLink
-                :to="`/anime/${route.params.slug}/episodes`"
-                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
-              >
-                Episodes
-              </NuxtLink>
-              <NuxtLink
-                :to="`/anime/${route.params.slug}/characters`"
-                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
-              >
-                Characters
-              </NuxtLink>
-              <!--<NuxtLink
-                :to="`/anime/${route.params.slug}/reactions`"
-                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
-              >
-                Reactions
-              </NuxtLink>
-              <NuxtLink
-                :to="`/anime/${route.params.slug}/franchise`"
-                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
-              >
-                Franchise
-              </NuxtLink>-->
-            </div>
-          </div>
-          <NuxtPage :anime="anime" :animeTitle="animeTitle"/>
-        </div>
-      </div>
+    <div class="">
+        <img
+            :src="anime.details.coverImage.original"
+            alt=""
+            class="w-full h-[400px] object-cover"
+        >
     </div>
-  </div>
+    <div class="bg-[#f7f7f7]">
+        <div class="container">
+            <div class="flex items-start gap-8">
+                <div class="flex-shrink-0 w-[200px] relative top-[-80px]">
+                    <div class="">
+                        <div class="mb-4 rounded overflow-hidden">
+                            <img :src="anime.details.posterImage.medium" alt="">
+                        </div>
+                    </div>
+                    <div>Watch on</div>
+                </div>
+                <div class="flex-1">
+                    <div class="bg-white rounded mb-4">
+                        <div class="flex w-max text-center rounded overflow-hidden">
+                            <NuxtLink
+                                :to="`/anime/${route.params.slug}`"
+                                class="py-4 px-7 flex-1 hover:bg-black hover:text-white"
+                                disabled="true"
+                            >
+                                Summary
+                            </NuxtLink>
+                            <NuxtLink
+                                :to="`/anime/${route.params.slug}/episodes`"
+                                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
+                            >
+                                Episodes
+                            </NuxtLink>
+                            <NuxtLink
+                                :to="`/anime/${route.params.slug}/characters`"
+                                class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
+                            >
+                                Characters
+                            </NuxtLink>
+                            <!--<NuxtLink
+                              :to="`/anime/${route.params.slug}/reactions`"
+                              class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
+                            >
+                              Reactions
+                            </NuxtLink>
+                            <NuxtLink
+                              :to="`/anime/${route.params.slug}/franchise`"
+                              class="py-4 px-7 text-[#999] flex-1 hover:bg-black hover:text-white"
+                            >
+                              Franchise
+                            </NuxtLink>-->
+                        </div>
+                    </div>
+                    <NuxtPage :anime="anime" :anime-title="animeTitle" />
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { defineOptions } from '@vue/runtime-core';
+import { defineOptions } from 'vue';
 import { useFetch, useRoute, useAppConfig } from 'nuxt/app';
 import { onMounted, Ref, ref, useAttrs } from 'vue'
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import { AnimeDetails } from '@@/src/shared/types/anime';
 defineOptions({
-  name: 'anime-page'
+  name: 'AnimePage'
 })
 
 const config = await useAppConfig()
 
-let route = useRoute()
-let animeSeries = ref([])
-let {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(config.host, {
+const route = useRoute()
+const animeSeries = ref([])
+const {data: anime}: { data: Ref<AnimeDetails> } = await useFetch(config.host, {
   key: 'animeDetails',
   query: {
     'fields[categories]': 'slug,title',
@@ -99,13 +103,13 @@ onMounted(() => {
 })
 
 async function getAnimeSeries(id: string) {
-  let response = await fetch(`https://kitsu.io/api/edge/media-relationships?filter[source_id]=${ id }&filter[source_type]=Anime&include=destination&page[limit]=4&sort=role`)
-  let data = await response.json()
+  const response = await fetch(`https://kitsu.io/api/edge/media-relationships?filter[source_id]=${ id }&filter[source_type]=Anime&include=destination&page[limit]=4&sort=role`)
+  const data = await response.json()
   animeSeries.value = data.included
 }
 
-let animeDescription = ref(checkDescriptionLength(anime.value.details.description) ? anime.value.details.description.substr(0, 475) + '...' : anime.value.details.description)
-let isShowCroppedDescription = ref(checkDescriptionLength(anime.value.details.description))
+const animeDescription = ref(checkDescriptionLength(anime.value.details.description) ? anime.value.details.description.substr(0, 475) + '...' : anime.value.details.description)
+const isShowCroppedDescription = ref(checkDescriptionLength(anime.value.details.description))
 const animeDetails = computed(() => {
   const detailNames = ['titles', 'subtype', 'episodeCount', 'status', 'ageRating', 'ageRatingGuide', 'episodeLength', 'totalLength']
   const result = {}

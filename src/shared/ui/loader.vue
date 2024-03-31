@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-col justify-center items-center">
-    <div class="lds-ring">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div class="flex flex-col justify-center items-center">
+        <div class="lds-ring">
+            <div />
+            <div />
+            <div />
+            <div />
+        </div>
+        <span class="font-medium mt-2">Loading...</span>
     </div>
-    <span class="font-medium mt-2">Loading...</span>
-  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,10 +1,10 @@
 <template>
-  Not Yet
+    Not Yet
 </template>
 
 <script>
 export default {
-  name: 'episodes'
+  name: 'Episodes'
 }
 </script>
 

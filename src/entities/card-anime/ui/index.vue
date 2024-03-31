@@ -1,19 +1,19 @@
 <template>
-  <div :class="$attrs.class">
-    <NuxtLink :to="`/anime/${anime?.slug}`" class="relative">
-      <img
-        :src="anime?.posterImage.medium"
-        alt=""
-        :class="[size === 'MEDIUM' ? 'max-w-[155px]' : 'max-w-[55px]']"
-        :title="anime.canonicalTitle"
-      >
-      <!--<NuxtLink :to="`anime/${anime?.slug}`" class=""></NuxtLink>-->
-    </NuxtLink>
-  </div>
+    <div :class="$attrs.class">
+        <NuxtLink :to="`/anime/${anime?.slug}`" class="relative">
+            <img
+                :src="anime?.posterImage.medium"
+                alt=""
+                :class="[size === 'MEDIUM' ? 'max-w-[155px]' : 'max-w-[55px]']"
+                :title="anime.canonicalTitle"
+            >
+            <!--<NuxtLink :to="`anime/${anime?.slug}`" class=""></NuxtLink>-->
+        </NuxtLink>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { defineOptions, defineProps } from '@vue/runtime-core';
+import { defineOptions, defineProps } from 'vue';
 import { AnimeDetails } from '@@/src/shared/types/anime';
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 }
 
 defineOptions({
-  name: 'card',
+  name: 'Card',
   inheritAttrs: false
 })
 defineProps<Props>()
