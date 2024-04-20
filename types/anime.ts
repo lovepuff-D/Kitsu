@@ -24,7 +24,7 @@ export enum Type {
   Categories = "categories",
 }
 
-interface Details {
+export interface Details {
   createdAt:           Date;
   updatedAt:           Date;
   slug:                string;

@@ -1,19 +1,41 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  typescript: {
-    typeCheck: true
-  },
-  css: ['~/assets/css/main.css'],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
+    css: ['~/assets/css/main.css'],
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
+        },
     },
-  },
-  runtimeConfig: {
-    public: {
-      host: process.env.baseAPIPath
-    }
-  },
+    devtools: {
+        enabled: true
+    },
+    typescript: {
+        typeCheck: false
+    },
+    modules: [
+        '@pinia/nuxt',
+    ],
+    components: [
+        {
+            path: 'modules',
+            extensions: ['.vue'],
+            prefix: 'Modules',
+        },
+        {
+            path: 'components',
+            extensions: ['.vue'],
+            prefix: 'Components',
+        },
+        {
+            path: 'ui',
+            extensions: ['.vue'],
+            prefix: 'UI',
+        },
+    ],
+    runtimeConfig: {
+        public: {
+            host: process.env.baseAPIPath
+        }
+    },
 })

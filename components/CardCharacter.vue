@@ -13,12 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, defineProps } from 'vue';
-import { AnimeDetails } from '@@/shared/types/anime';
+import { defineOptions } from '#imports';
+// import { Character } from '~/types/character';
+
 
 interface Props {
   size: 'MEDIUM' | 'TINY',
-  character: AnimeDetails['details'],
+  character: Character,
 }
 
 defineOptions({name: 'Card'})

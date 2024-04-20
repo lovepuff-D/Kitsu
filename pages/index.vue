@@ -17,25 +17,56 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-8">
-                    <template
-                        v-for="trendingAnime in listTrendingAnime"
-                        :key="trendingAnime.id"
-                    >
-                        <CardAnime
-                            size="MEDIUM"
-                            :anime="trendingAnime.attributes"
-                        />
-                    </template>
                     <section class="flex flex-col gap-2">
                         <h6 class="font-semibold">
                             Trending This Week
                         </h6>
                         <div class="flex gap-3">
-                            <CardAnime
-                                v-for="trendingAnime in listTrendingAnime"
-                                :key="trendingAnime.id"
+                            <ComponentsCardAnime
+                                v-for="anime in trendingAnime"
+                                :key="anime.id"
                                 size="MEDIUM"
-                                :anime="trendingAnime.attributes"
+                                :anime="anime.attributes"
+                                no-rounded
+                            />
+                        </div>
+                    </section>
+                    <section class="flex flex-col gap-2">
+                        <h6 class="font-semibold">
+                            Top Airing Anime
+                        </h6>
+                        <div class="flex gap-3">
+                            <ComponentsCardAnime
+                                v-for="anime in airingAnime"
+                                :key="anime.id"
+                                size="MEDIUM"
+                                :anime="anime.attributes"
+                            />
+                        </div>
+                    </section>
+                    <section class="flex flex-col gap-2">
+                        <h6 class="font-semibold">
+                            Upcoming Anime
+                        </h6>
+                        <div class="flex gap-3">
+                            <ComponentsCardAnime
+                                v-for="anime in upcomingAnime"
+                                :key="anime.id"
+                                size="MEDIUM"
+                                :anime="anime.attributes"
+                            />
+                        </div>
+                    </section>
+                    <section class="flex flex-col gap-2">
+                        <h6 class="font-semibold">
+                            Highest Rated Anime
+                        </h6>
+                        <div class="flex gap-3">
+                            <ComponentsCardAnime
+                                v-for="anime in highestRateAnime"
+                                :key="anime.id"
+                                size="MEDIUM"
+                                :anime="anime.attributes"
                             />
                         </div>
                     </section>
@@ -44,11 +75,11 @@
                             Most Popular Anime
                         </h6>
                         <div class="flex gap-3">
-                            <CardAnime
-                                v-for="trendingAnime in listMostPopularAnime"
-                                :key="trendingAnime.id"
+                            <ComponentsCardAnime
+                                v-for="anime in popularAnime"
+                                :key="anime.id"
                                 size="MEDIUM"
-                                :anime="trendingAnime.attributes"
+                                :anime="anime.attributes"
                             />
                         </div>
                     </section>
@@ -59,7 +90,8 @@
                     <h5 class="mb-4">
                         MY FAVORITE CATEGORIES
                     </h5>
-                    <p>Favourite categories will improve your recommendations</p>
+                    <!--TODO Add favorites via localStorage-->
+                    <p>Favoriting categories will improve your recommendations. (Add via localStorage)</p>
                 </div>
                 <div>
                     <h5 class="mb-4">
@@ -81,10 +113,10 @@
 </template>
 
 <script setup lang="ts">
-import { CardAnime } from '@@/src/entities/card-anime'
-/*import { useCategoryStore } from '~/store/categories'*/
-import { useAsyncData, useFetch, useHead } from 'nuxt/app';
-import { AnimeDetails } from '@@/src/shared/types/anime';
+// TODO нормально типитизировать
+// import { useCategoryStore } from '~/store/categories'
+import { useFetch, useHead } from '#imports';
+import { AnimeDetails } from '~/types/anime';
 
 type animeList = {
     id: string;
@@ -96,20 +128,50 @@ useHead({
     title: 'Explore Anime'
 })
 
-const {data: listTrendingAnime} = await useFetch('https://kitsu.io/api/edge/trending/anime', {
-    key: 'listTrendingAnime',
+function fetchTransform(response: any): animeList {
+    return response.data.map((item: any) => ({id: item.id, attributes: item.attributes}));
+}
+
+const {data: trendingAnime} = await useFetch('https://kitsu.io/api/edge/trending/anime', {
+    key: 'trendingAnime',
     params: {
         limit: 5
     },
-    transform: (r: any): animeList => r.data.map((item: any) => ({id: item.id, attributes: item.attributes}))
+    transform: fetchTransform
 })
-const {data: listMostPopularAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
-    key: 'listMostPopularAnime',
+const {data: airingAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
+    key: 'airingAnime',
+    params: {
+        'filter[status]': 'current',
+        'page[limit]': 5,
+        sort: '-user_count'
+    },
+    transform: fetchTransform
+})
+const {data: upcomingAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
+    key: 'upcomingAnime',
+    params: {
+        'filter[status]': 'upcoming',
+        'page[limit]': 5,
+        sort: '-user_count'
+    },
+    transform: fetchTransform
+})
+const {data: highestRateAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
+    key: 'highestRateAnime',
+    params: {
+        'page[limit]': 5,
+        sort: '-average_rating'
+    },
+    transform: fetchTransform
+})
+const {data: popularAnime} = await useFetch('https://kitsu.io/api/edge/anime', {
+    key: 'popularAnime',
     params: {
         'page[limit]': 5,
         sort: '-user_count'
     },
-    transform: (r: any): animeList => r.data.map((item: any) => ({id: item.id, attributes: item.attributes}))
+    transform: fetchTransform
 })
 /*let {data: categories} = await useFetch('https://kitsu.io/api/edge/categories')*/
 

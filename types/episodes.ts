@@ -1,4 +1,4 @@
-export interface Episodes {
+export interface Episode {
   createdAt:      Date;
   updatedAt:      Date;
   synopsis:       string;
